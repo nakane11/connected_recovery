@@ -1,0 +1,7 @@
+<library path="lib/libswitch_recovery">
+  <class name="switch_recovery/SwitchRecovery" type="switch_recovery::SwitchRecovery" base_class_type="nav_core::RecoveryBehavior">
+    <description>
+      A recovery behavior that switches human-connected and non-human-connected.
+    </description>
+  </class>
+</library>
