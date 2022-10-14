@@ -78,6 +78,8 @@ public:
 
 private:
   bool initialized_;
+  ros::NodeHandle pnh_;
+  ros::ServiceClient client;
 };
 };  // namespace partial_rotate
 #endif  // PARTIAL_ROTATE_PARTIAL_ROTATE_H

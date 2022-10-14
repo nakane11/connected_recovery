@@ -43,7 +43,7 @@
 // #include <geometry_msgs/Point.h>
 // #include <angles/angles.h>
 // #include <algorithm>
-// #include <string>
+#include <string>
 #include <std_srvs/Empty.h>
 
 
@@ -52,7 +52,7 @@ PLUGINLIB_EXPORT_CLASS(partial_rotate::PartialRotate, nav_core::RecoveryBehavior
 
 namespace partial_rotate
 {
-PartialRotate::PartialRotate(): initialized_(false)
+  PartialRotate::PartialRotate(): pnh_("~"), initialized_(false)
 {
 }
 
@@ -80,18 +80,23 @@ void PartialRotate::runBehavior()
     ROS_ERROR("This object must be initialized before runBehavior is called");
     return;
   }
-
   ROS_WARN("Rotate recovery behavior started.");
-  ros::NodeHandle n;
-  ros::ServiceClient client = n.serviceClient<std_srvs::Empty>("partial_rotate");
+  client = pnh_.serviceClient<std_srvs::Empty>("partial_rotate");
   std_srvs::Empty srv;
-  if (client.call(srv))
+  if (client.waitForExistence(ros::Duration(1.0)))
     {
-      ROS_INFO("Succeed in calling service partial_rotate");
+      if (client.call(srv))
+        {
+          ROS_INFO("Succeed in calling service partial_rotate");
+        }
+      else
+        {
+          ROS_ERROR("Failed to call service partial_rotate");
+        }
     }
   else
     {
-      ROS_ERROR("Failed to call service partial_rotate");
+      ROS_ERROR("Failed to find service partial_rotate");
     }
 }
 };  // namespace partial_rotate
