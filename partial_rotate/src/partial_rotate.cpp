@@ -81,7 +81,7 @@ void PartialRotate::runBehavior()
     return;
   }
   ROS_WARN("Rotate recovery behavior started.");
-  client = pnh_.serviceClient<std_srvs::Empty>("partial_rotate");
+  client = pnh_.serviceClient<std_srvs::Empty>("/partial_rotate");
   std_srvs::Empty srv;
   if (client.waitForExistence(ros::Duration(1.0)))
     {
