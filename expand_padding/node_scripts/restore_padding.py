@@ -9,8 +9,10 @@ class RestorePadding(object):
 
     def __init__(self):
         self.shrink = False
-        self.default_padding = rospy.get_param("/move_base_node/global_costmap/footprint_padding")
-        self.client = dynamic_reconfigure.client.Client("/move_base_node/global_costmap", timeout=5.0)
+        self.padding_name = rospy.get_param("~padding_name", "/move_base_node/global_costmap/footprint_padding")
+        self.global_name = rospy.get_param("~global_name", "/move_base_node/global_costmap")
+        self.default_padding = rospy.get_param(self.padding_name)
+        self.client = dynamic_reconfigure.client.Client(self.global_name, timeout=5.0)
         self.recovery_sub = rospy.Subscriber("/move_base/recovery_status", RecoveryStatus, self.recovery_cb)
         self.move_base_sub = rospy.Subscriber("/move_base/result", MoveBaseActionResult, self.move_base_cb)
 
