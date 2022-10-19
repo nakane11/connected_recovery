@@ -5,16 +5,12 @@ add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED
   COMPONENTS
-    angles
-    base_local_planner
     cmake_modules
     costmap_2d
-    geometry_msgs
     nav_core
     pluginlib
     roscpp
     tf2
-    tf2_geometry_msgs
     tf2_ros
 )
 
@@ -31,7 +27,6 @@ catkin_package(
   LIBRARIES expand_padding
   CATKIN_DEPENDS
     costmap_2d
-    geometry_msgs
     nav_core
     pluginlib
     roscpp
