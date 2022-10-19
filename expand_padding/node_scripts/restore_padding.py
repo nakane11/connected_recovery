@@ -1,9 +1,13 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import rospy
 import dynamic_reconfigure.client
 
 from move_base_msgs.msg import RecoveryStatus
 from move_base_msgs.msg import MoveBaseActionResult
+
+from sound_play.libsoundplay import SoundClient
 
 class RestorePadding(object):
 
@@ -13,10 +17,16 @@ class RestorePadding(object):
         self.global_name = rospy.get_param("~global_name", "/move_base_node/global_costmap")
         self.default_padding = rospy.get_param(self.padding_name)
         self.client = dynamic_reconfigure.client.Client(self.global_name, timeout=5.0)
+        self.client_en = SoundClient(sound_action='/robotsound', blocking=True)
         self.recovery_sub = rospy.Subscriber("/move_base/recovery_status", RecoveryStatus, self.recovery_cb)
         self.move_base_sub = rospy.Subscriber("/move_base/result", MoveBaseActionResult, self.move_base_cb)
 
+    def speak(self, client, speech_text):
+        client.say(speech_text, volume=1.0, replace=False)
+        return client.actionclient.get_result()
+
     def recovery_cb(self, msg):
+        self.speak(self.client_en, msg.recovery_behavior_name)
         if msg.recovery_behavior_name.startswith('expand_padding'):
             self.shrink = True
 
