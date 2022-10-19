@@ -44,36 +44,18 @@
 
 namespace expand_padding
 {
-/**
- * @class ExpandPadding
- * @brief A recovery behavior that rotates the robot in-place to attempt to clear out space
- */
+
 class ExpandPadding : public nav_core::RecoveryBehavior
 {
 public:
-  /**
-   * @brief  Constructor, make sure to call initialize in addition to actually initialize the object
-   */
   ExpandPadding();
 
-  /**
-   * @brief  Initialization function for the ExpandPadding recovery behavior
-   * @param name Namespace used in initialization
-   * @param tf (unused)
-   * @param global_costmap (unused)
-   * @param local_costmap A pointer to the local_costmap used by the navigation stack
-   */
   void initialize(std::string name, tf2_ros::Buffer*,
-                  costmap_2d::Costmap2DROS*, costmap_2d::Costmap2DROS*);
+                  costmap_2d::Costmap2DROS* global_costmap,
+                  costmap_2d::Costmap2DROS* local_costmap);
 
-  /**
-   * @brief  Run the ExpandPadding recovery behavior.
-   */
   void runBehavior();
 
-  /**
-   * @brief  Destructor for the rotate recovery behavior
-   */
   ~ExpandPadding();
 
 private:

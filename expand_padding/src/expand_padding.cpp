@@ -50,8 +50,10 @@ namespace expand_padding
 }
 
 void ExpandPadding::initialize(std::string name, tf2_ros::Buffer*,
-                                costmap_2d::Costmap2DROS*, costmap_2d::Costmap2DROS*)
+                               costmap_2d::Costmap2DROS* global_costmap,
+                               costmap_2d::Costmap2DROS* local_costmap)
 {
+  std::lock_guard<std::mutex> lock(mtx_);
   if (!initialized_)
   {
     ros::NodeHandle pnh_("~/" + name);
@@ -72,6 +74,7 @@ ExpandPadding::~ExpandPadding()
 
 void ExpandPadding::runBehavior()
 {
+  std::lock_guard<std::mutex> lock(mtx_);
   if (!initialized_)
   {
     ROS_ERROR("This object must be initialized before runBehavior is called");
