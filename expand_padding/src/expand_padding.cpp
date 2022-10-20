@@ -49,9 +49,15 @@ namespace expand_padding
 {
 }
 
-void ExpandPadding::initialize(std::string name, tf2_ros::Buffer*,
-                               costmap_2d::Costmap2DROS* global_costmap,
-                               costmap_2d::Costmap2DROS* local_costmap)
+#ifdef USE_TF_BUFFER
+  void ExpandPadding::initialize(std::string name, tf2_ros::Buffer*,
+                                 costmap_2d::Costmap2DROS* global_costmap,
+                                 costmap_2d::Costmap2DROS* local_costmap)
+#else
+  void ExpandPadding::initialize(std::string name, tf::TransformListener* tf,
+                                 costmap_2d::Costmap2DROS* global_costmap,
+                                 costmap_2d::Costmap2DROS* local_costmap)
+#endif
 {
   std::lock_guard<std::mutex> lock(mtx_);
   if (!initialized_)

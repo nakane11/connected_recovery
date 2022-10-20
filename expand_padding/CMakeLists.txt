@@ -36,6 +36,17 @@ catkin_package(
 
 add_library(expand_padding src/expand_padding.cpp)
 add_dependencies(expand_padding ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+# check ros distro >= indigo
+execute_process(
+  COMMAND python -c "import sys; sys.exit(ord('$ENV{ROS_DISTRO}'[0]) >= ord('melodic'[0]))"
+  RESULT_VARIABLE DISTRO_GE_MELODIC
+  )
+
+if(${DISTRO_GE_MELODIC})
+  add_definitions(-DUSE_TF_BUFFER)
+endif()
+
 target_link_libraries(expand_padding ${catkin_LIBRARIES})
 
 install(TARGETS expand_padding

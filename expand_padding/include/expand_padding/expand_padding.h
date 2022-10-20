@@ -38,9 +38,13 @@
 #define EXPAND_PADDING_EXPAND_PADDING_H
 #include <nav_core/recovery_behavior.h>
 #include <costmap_2d/costmap_2d_ros.h>
-#include <tf2_ros/buffer.h>
 #include <thread>
 #include <mutex>
+#ifdef USE_TF_BUFFER
+#include <tf2_ros/buffer.h>
+#else
+#include <tf/transform_listener.h>
+#endif
 
 namespace expand_padding
 {
@@ -50,10 +54,15 @@ class ExpandPadding : public nav_core::RecoveryBehavior
 public:
   ExpandPadding();
 
+#ifdef USE_TF_BUFFER
   void initialize(std::string name, tf2_ros::Buffer*,
                   costmap_2d::Costmap2DROS* global_costmap,
                   costmap_2d::Costmap2DROS* local_costmap);
-
+#else
+  void initialize(std::string name, tf::TransformListener* tf,
+                  costmap_2d::Costmap2DROS* global_costmap,
+                  costmap_2d::Costmap2DROS* local_costmap);
+#endif
   void runBehavior();
 
   ~ExpandPadding();
