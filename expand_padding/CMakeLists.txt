@@ -43,9 +43,9 @@ execute_process(
   RESULT_VARIABLE DISTRO_GE_MELODIC
   )
 
-if(${DISTRO_GE_MELODIC})
+#if(${DISTRO_GE_MELODIC})
   add_definitions(-DUSE_TF_BUFFER)
-endif()
+#endif()
 
 target_link_libraries(expand_padding ${catkin_LIBRARIES})
 
