@@ -26,13 +26,14 @@ class RestorePadding(object):
         return client.actionclient.get_result()
 
     def recovery_cb(self, msg):
-        self.speak(self.client_en, msg.recovery_behavior_name)
+        # self.speak(self.client_en, msg.recovery_behavior_name)
         if msg.recovery_behavior_name.startswith('expand_padding'):
             self.shrink = True
 
     def move_base_cb(self, msg):
         if self.shrink is True:
             self.client.update_configuration({"footprint_padding" : self.default_padding})
+            rospy.loginfo("restore footprint_padding to {}".format(self.default_padding))
             self.shrink = False
 
 if __name__ == '__main__':
