@@ -74,7 +74,9 @@ private:
   double timeout_duration_;
   std::mutex mtx_;
 
-  double footprint_padding_;
+  double padding_ratio_;
+  double current_padding_;
+  double min_padding_;
 };
 };  // namespace expand_padding
 #endif  // EXPAND_PADDING_EXPAND_PADDING_H

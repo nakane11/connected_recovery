@@ -64,7 +64,8 @@ namespace expand_padding
   {
     ros::NodeHandle pnh_("~/" + name);
     reconfigure_name_ = pnh_.param<std::string>("reconfigure_name", "/move_base_node/global_costmap");
-    footprint_padding_ = pnh_.param("footprint_padding", 0.3);
+    pnh_.getParam("padding_ratio", padding_ratio_);
+    std::cout << "ratio" << padding_ratio_ << std::endl;
     initialized_ = true;
   }
   else
@@ -87,15 +88,25 @@ void ExpandPadding::runBehavior()
     return;
   }
   ROS_WARN("Expand Padding recovery behavior started.");
+  std::string s = reconfigure_name_ + "/footprint_padding";
+  pnh_.getParam(s, current_padding_);
+  pnh_.getParam("/move_base_node/local_costmap/footprint_padding", min_padding_);
   dynamic_reconfigure::ReconfigureRequest srv_req;
   dynamic_reconfigure::ReconfigureResponse srv_resp;
   dynamic_reconfigure::DoubleParameter double_param;
   dynamic_reconfigure::Config conf;
   double_param.name = "footprint_padding";
-  double_param.value = footprint_padding_;
+  if(padding_ratio_ == 0)
+    {
+      double_param.value = min_padding_;
+    }
+  else
+    {
+      double_param.value = (current_padding_ - min_padding_) * padding_ratio_;
+    }
   conf.doubles.push_back(double_param);
   srv_req.config = conf;
-  std::string s = reconfigure_name_ + "/set_parameters";
+  s = reconfigure_name_ + "/set_parameters";
   if (ros::service::call(s, srv_req, srv_resp)) {
     ROS_INFO("call to set global_costmap parameters succeeded");
   } else {
